@@ -13,6 +13,12 @@ int execute(char **comms);
 char *commands[] = {"cd", "echo", "pwd"};
 
 
+int func_cd(char **args){
+    if(args[1]==NULL){
+        printf("expected argument to cd")
+    }
+}
+
 
 int main(){
 
