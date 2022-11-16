@@ -1,0 +1,40 @@
+ # copykernel --> copy of the original/stock kernel without the newly defined twodmemcpy system call
+ # diff -u linux-5.19.8/Makefile copykernel/linux-5.19.8/Makefile > patch.txt
+
+--- linux-5.19.8/Makefile	2022-11-16 18:31:54.259982782 +0530
++++ copykernel/linux-5.19.8/Makefile	2022-11-16 18:20:28.609996035 +0530
+@@ -1100,7 +1100,7 @@
+ export MODULES_NSDEPS := $(extmod_prefix)modules.nsdeps
+ 
+ ifeq ($(KBUILD_EXTMOD),)
+-core-y			+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ twodmemcpy/
++core-y			+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
+ core-$(CONFIG_BLOCK)	+= block/
+ core-$(CONFIG_IO_URING)	+= io_uring/
+
+
+ # diff -u linux-5.19.8/arch/x86/entry/syscalls/syscall_64.tbl copykernel/linux-5.19.8/arch/x86/entry/syscalls/syscall_64.tbl > patch.txt	
+ 
+--- linux-5.19.8/arch/x86/entry/syscalls/syscall_64.tbl	2022-11-16 18:32:34.989981995 +0530
++++ copykernel/linux-5.19.8/arch/x86/entry/syscalls/syscall_64.tbl	2022-11-16 18:18:40.029998134 +0530
+@@ -372,7 +372,7 @@
+ 448	common	process_mrelease	sys_process_mrelease
+ 449	common	futex_waitv		sys_futex_waitv
+ 450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
+-451	common	kernel_twodmemcpy	sys_twodmemcpy
++
+ 
+ # Due to a historical design error, certain syscalls are numbered differently
+
+
+ # copykernel has an empty directory named twodmemcpy (same as modified kernel) to compare the defined .c file of the syscall
+ # diff -u linux-5.19.8/twodmemcpy copykernel/linux-5.19.8/twodmemcpy > patch.txt
+
+Only in linux-5.19.8/twodmemcpy/: .built-in.a.cmd
+Only in linux-5.19.8/twodmemcpy/: .modules.order.cmd
+Only in linux-5.19.8/twodmemcpy/: .twodmemcpy.o.cmd
+Only in linux-5.19.8/twodmemcpy/: Makefile
+Only in linux-5.19.8/twodmemcpy/: built-in.a
+Only in linux-5.19.8/twodmemcpy/: modules.order
+Only in linux-5.19.8/twodmemcpy/: twodmemcpy.c
+Only in linux-5.19.8/twodmemcpy/: twodmemcpy.o
