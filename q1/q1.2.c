@@ -69,27 +69,41 @@ int main(int argc, char *argv[]){
             }
 
             else{
-		wait(NULL);
-                //do {pid3 = wait(&status3);}
-                //while(!WIFEXITED(status3) && !WIFSIGNALED(status3));
-
+                wait(NULL);
                 clock_gettime(CLOCK_REALTIME, &f3);
             }
-	    wait(NULL);
 
-            //do {pid2 = wait(&status2);}
-            //while(!WIFEXITED(status2) && !WIFSIGNALED(status2));
-
+            wait(NULL);
             clock_gettime(CLOCK_REALTIME, &f2);
         }
         
-	wait(NULL);
-        //do {pid1 = wait(&status1);}
-        //while(!WIFEXITED(status1) && !WIFSIGNALED(status1));
-
+        wait(NULL);
         clock_gettime(CLOCK_REALTIME, &f1);
     }
 
+    ll s,ns;
+    s = f1.tv_sec - s1.tv_sec;
+    ns = f1.tv_nsec - s1.tv_nsec;
+    if(ns < 0L){
+        s--;
+        ns += 1000000000L;
+    }
+    printf("Child process 1: %lli.%lli seconds\n",s,ns);
 
+    s = f2.tv_sec - s2.tv_sec;
+    ns = f2.tv_nsec - s2.tv_nsec;
+    if(ns < 0L){
+        s--;
+        ns += 1000000000L;
+    }
+    printf("Child process 2: %lli.%lli seconds\n",s,ns);
+
+    s = f3.tv_sec - s3.tv_sec;
+    ns = f3.tv_nsec - s3.tv_nsec;
+    if(ns < 0L){
+        s--;
+        ns += 1000000000L;
+    }
+    printf("Child process 3: %lli.%lli seconds\n",s,ns);
     
 }
