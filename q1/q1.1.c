@@ -14,8 +14,7 @@ void *counta(void *i){
     struct sched_param p = {.sched_priority = -19};
     pthread_setschedparam(pthread_self(),SCHED_OTHER,&p);
 
-    ll x = 1;
-    ll r = x<<32;
+    ll r = 1L<<32;
     ll j = *((ll *) i);
     for(;j<=r;j++);
 
@@ -28,8 +27,7 @@ void *countb(void *i){
     struct sched_param p = {.sched_priority = 20};
     pthread_setschedparam(pthread_self(),SCHED_FIFO,&p);
 
-    ll x = 1;
-    ll r = x<<32;
+    ll r = 1L<<32;
     ll j = *((ll *) i);
     for(;j<=r;j++);
 
@@ -42,8 +40,7 @@ void *countc(void *i){
     struct sched_param p = {.sched_priority = 98};
     pthread_setschedparam(pthread_self(),SCHED_RR,&p);
 
-    ll x = 1;
-    ll r = x<<32;
+    ll r = 1L<<32;
     ll j = *((ll *) i);
     for(;j<=r;j++);
 
