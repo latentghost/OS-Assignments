@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <time.h>
+#include <sched.h>
 
 
 void *counta(void *i){
