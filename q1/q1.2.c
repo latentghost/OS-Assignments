@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
     }
 
     else if(pid1==0){
-        execl("/bin/bash","sh","script.sh",(char *) NULL);
+        execl("/bin/bash","sh","s1.sh",(char *) NULL);
 
         exit(EXIT_SUCCESS);
     }
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]){
         }
 
         else if(pid2==0){
-            execl("/bin/bash","sh","script.sh",(char *) NULL);
+            execl("/bin/bash","sh","s2.sh",(char *) NULL);
 
             exit(EXIT_SUCCESS);
         }
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]){
             }
 
             else if(pid3==0){
-                execl("/bin/bash","sh","script.sh",(char *) NULL);
+                execl("/bin/bash","sh","s3.sh",(char *) NULL);
 
                 exit(EXIT_SUCCESS);
             }
