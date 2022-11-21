@@ -12,7 +12,7 @@ struct timespec s1,f1,s2,f2,s3,f3;
 void *counta(void *i){
 
     struct sched_param p = {.sched_priority = -19};
-    pthread_setschedparam(pthread_self(),SCHED_OTHER,&p);
+    nice(-19);
 
     ll r = 1L<<32;
     ll j = *((ll *) i);
