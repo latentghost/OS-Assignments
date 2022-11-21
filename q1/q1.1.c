@@ -14,9 +14,13 @@ void *counta(void *i){
     struct sched_param p = {.sched_priority = -19};
     nice(-19);
 
+    clock_gettime(CLOCK_REALTIME,&s1);
+
     ll r = 1L<<32;
     ll j = *((ll *) i);
     for(;j<=r;j++);
+
+    clock_gettime(CLOCK_REALTIME,&f1);
 
     return NULL;
 }
@@ -27,9 +31,13 @@ void *countb(void *i){
     struct sched_param p = {.sched_priority = 20};
     pthread_setschedparam(pthread_self(),SCHED_FIFO,&p);
 
+    clock_gettime(CLOCK_REALTIME,&s2);
+
     ll r = 1L<<32;
     ll j = *((ll *) i);
     for(;j<=r;j++);
+
+    clock_gettime(CLOCK_REALTIME,&f2);
 
     return NULL;
 }
@@ -40,9 +48,13 @@ void *countc(void *i){
     struct sched_param p = {.sched_priority = 98};
     pthread_setschedparam(pthread_self(),SCHED_RR,&p);
 
+    clock_gettime(CLOCK_REALTIME,&s3);
+
     ll r = 1L<<32;
     ll j = *((ll *) i);
     for(;j<=r;j++);
+
+    clock_gettime(CLOCK_REALTIME,&f3);
 
     return NULL;
 }
@@ -55,30 +67,18 @@ int main(int argc, char* argv[]){
 
     // Start all threads in parallel
 
-    clock_gettime(CLOCK_REALTIME,&s1);
-
     pthread_create(&ta,NULL,&counta,&i);
 
-    clock_gettime(CLOCK_REALTIME,&s2);
-
     pthread_create(&tb,NULL,&countb,&i);
-
-    clock_gettime(CLOCK_REALTIME,&s3);
 
     pthread_create(&tc,NULL,&countc,&i);
 
 
     pthread_join(ta,NULL);
 
-    clock_gettime(CLOCK_REALTIME,&f1);
-
     pthread_join(tb,NULL);
 
-    clock_gettime(CLOCK_REALTIME,&f2);
-
     pthread_join(tc,NULL);
-
-    clock_gettime(CLOCK_REALTIME,&f3);
     
     ll s,ns;
 
