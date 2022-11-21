@@ -9,8 +9,8 @@
 
 int main(int argc, char *argv[]){
 	int c = 4, r = 3;
-	float arr[][4] = {{1.1,2.2,3.3,4.4},{9.1,8.2,7.3,6.4},{23.23,39.67,12.09,29.08}};
-	float outarr[r][c];
+	float arr[3][4] = {{1.1,2.2,3.3,4.4},{9.1,8.2,7.3,6.4},{23.23,39.67,12.09,29.08}};
+	float outarr[3][4];
 
 	if(syscall(TWOD_MEMCPY, arr, outarr, c, r) != EFAULT){
 		printf("twod_memcpy system call invoked\n");
