@@ -68,13 +68,21 @@ int main(int argc, char* argv[]){
     pthread_create(&tc,NULL,&countc,&i);
 
 
-    // End thread A
-
     pthread_join(ta,NULL);
 
     clock_gettime(CLOCK_REALTIME,&f1);
+
+    pthread_join(tb,NULL);
+
+    clock_gettime(CLOCK_REALTIME,&f2);
+
+    pthread_join(tc,NULL);
+
+    clock_gettime(CLOCK_REALTIME,&f3);
     
     ll s,ns;
+
+    // End Thread A
 
     s = f1.tv_sec - s1.tv_sec;
     ns = f1.tv_nsec - s1.tv_nsec;
@@ -87,10 +95,6 @@ int main(int argc, char* argv[]){
 
     // End thread B
 
-    pthread_join(tb,NULL);
-
-    clock_gettime(CLOCK_REALTIME,&f2);
-
     s = f2.tv_sec - s2.tv_sec;
     ns = f2.tv_nsec - s2.tv_nsec;
     if(ns<0){
@@ -101,10 +105,6 @@ int main(int argc, char* argv[]){
 
 
     // End thread C
-
-    pthread_join(tc,NULL);
-
-    clock_gettime(CLOCK_REALTIME,&f3);
 
     s = f3.tv_sec - s3.tv_sec;
     ns = f3.tv_nsec - s3.tv_nsec;
