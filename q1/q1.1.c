@@ -11,8 +11,8 @@ struct timespec s1,f1,s2,f2,s3,f3;
 
 void *counta(void *i){
 
-    struct sched_param p = {.sched_priority = -19};
-    nice(-19);
+    struct sched_param p = {.sched_priority = 0};
+    nice(20);
 
     clock_gettime(CLOCK_REALTIME,&s1);
 
@@ -28,7 +28,7 @@ void *counta(void *i){
 
 void *countb(void *i){
 
-    struct sched_param p = {.sched_priority = 20};
+    struct sched_param p = {.sched_priority = 99};
     pthread_setschedparam(pthread_self(),SCHED_FIFO,&p);
 
     clock_gettime(CLOCK_REALTIME,&s2);
@@ -45,7 +45,7 @@ void *countb(void *i){
 
 void *countc(void *i){
 
-    struct sched_param p = {.sched_priority = 98};
+    struct sched_param p = {.sched_priority = 50};
     pthread_setschedparam(pthread_self(),SCHED_RR,&p);
 
     clock_gettime(CLOCK_REALTIME,&s3);

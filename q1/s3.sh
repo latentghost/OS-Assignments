@@ -1,5 +1,11 @@
 #!/bin/bash
 
-cd /home/latentghost/copy3/linux-5.19.8
+cd /home/latentghost/
+mkdir ker3
+cp linux-5.19.8.tar ker3/
+cd ker3/
+tar -xf linux.5.19.8.tar
+cd linux-5.19.8
+cp ../../config-rev-9-gold .config
+make nconfig
 make -j$(nproc)
-sudo make modules_install
