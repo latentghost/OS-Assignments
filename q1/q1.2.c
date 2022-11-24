@@ -65,7 +65,7 @@ int main(int argc, char *argv[]){
         }
 
         else if(pid2==0){
-            // execl("/bin/bash","sh","s2.sh",(char *) NULL);
+            execl("/bin/bash","sh","s2.sh",(char *) NULL);
 
             exit(EXIT_SUCCESS);
         }
@@ -86,7 +86,7 @@ int main(int argc, char *argv[]){
             }
 
             else if(pid3==0){
-                // execl("/bin/bash","sh","s3.sh",(char *) NULL);
+                execl("/bin/bash","sh","s3.sh",(char *) NULL);
 
                 exit(EXIT_SUCCESS);
             }
@@ -107,28 +107,16 @@ int main(int argc, char *argv[]){
     ll s,ns;
     s = f1.tv_sec - s1.tv_sec;
     ns = f1.tv_nsec - s1.tv_nsec;
-    // if(ns < 0L){
-    //     s--;
-    //     ns += 1000000000L;
-    // }
     ll *out1 = fix(s,ns);
     printf("Child process 1 (SCHED_OTHER): %lli.%lli seconds\n",*out1, *(out1+1));
 
     s = f2.tv_sec - s2.tv_sec;
     ns = f2.tv_nsec - s2.tv_nsec;
-    // if(ns < 0L){
-    //     s--;
-    //     ns += 1000000000L;
-    // }
     ll *out2 = fix(s,ns);
     printf("Child process 2 (SCHED_FIFO): %lli.%lli seconds\n",*out2, *(out2+1));
 
     s = f3.tv_sec - s3.tv_sec;
     ns = f3.tv_nsec - s3.tv_nsec;
-    // if(ns < 0L){
-    //     s--;
-    //     ns += 1000000000L;
-    // }
     ll *out3 = fix(s,ns);
     printf("Child process 3 (SCHED_RR): %lli.%lli seconds\n",*out3, *(out3+1));
     
