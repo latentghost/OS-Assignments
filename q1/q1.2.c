@@ -17,14 +17,14 @@ ll * fix(ll sec, ll nsec){
 
     if(nsec<0L){
         sec--;
-        nsec += 1000000000L
+        nsec += 1000000000L;
     }
 
     ll * out = malloc(2*sizeof(ll));
     *(out) = sec;
     *(out + 1) = nsec;
 
-    return out
+    return out;
 }
 
 
