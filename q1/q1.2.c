@@ -44,7 +44,7 @@ int main(int argc, char *argv[]){
     }
 
     else if(pid1==0){
-        // execl("/bin/bash","sh","s1.sh",(char *) NULL);
+        execl("/bin/bash","sh","s1.sh",(char *) NULL);
 
         exit(EXIT_SUCCESS);
     }
