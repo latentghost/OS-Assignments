@@ -56,11 +56,11 @@ int main(){
     // read and print data from the shared memory
     while(*read != '0'){   
         tmp = read;
-        int ind = 0;
+        int max = 0;
         while(*tmp!='-'){
             
             // print index
-            int i = 1;
+            int i = 1, ind = 0;
             while(((int) (*tmp - '0')) < 10){
                 printf("%c",*tmp);
                 ind += ((int) (*tmp - '0'))*i;
@@ -71,21 +71,20 @@ int main(){
             printf(" ");
 
             // print the string
-            while(((int) (*tmp - '0')) >= 10){
-                printf("%c",*tmp);
-                tmp++;
+            for(int i=0; i<LEN; i++){
+                printf("%c",*(tmp+i));
             }
+            tmp += LEN;
 
             // only store the last index
-            if(*tmp!='-') ind = 0;
+            if(ind>max) max = ind;
 
             printf("\n");
         }
 
         // return the highest index received to p1
-        char *end = "~";
-        char *outind = malloc(sizeof(char *));
-        inttos(ind, outind);
+        char *end = "~", *outind = "";
+        inttos(max, outind);
         strcat(end,outind);
 
         memcpy(read,end,strlen(read)*sizeof(char));
