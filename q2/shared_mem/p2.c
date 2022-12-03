@@ -89,9 +89,12 @@ int main(){
 
         memcpy(read,end,strlen(end)*sizeof(char));
 
+        execlp("p2",NULL);
+
         while(*read == '~'){
             sleep(1);
         }
+
     }
     
     return 0;

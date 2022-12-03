@@ -108,6 +108,8 @@ int main(){
         memcpy(read,wri,READSIZE);
 
         out = 1 + ((int) (read[1]-'0')) + ((int) (read[2]-'0'))*10;
+
+        execlp("p2",NULL);
     }
 
     tmp = wri;
