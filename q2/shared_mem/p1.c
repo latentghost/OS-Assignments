@@ -5,13 +5,29 @@
 #include <sys/types.h>
 #include <string.h>
 #include <unistd.h>
-#include <math.h>
 
 
 #define COPYSIZE 5*sizeof(char *)
 #define ERR (char *)-1
 #define LEN 7
 #define ARRSIZE 50*sizeof(char *)
+
+
+// convert int to string
+void inttos(int n, char *out){
+    char buff[10];
+    int x = (int) '0';
+    int i = 0;
+    while (n>0){
+        int a = n%10;
+        buff[i] = (char) (a + x);
+        i++;
+        n = n/10;
+    }
+    buff[i] = '\0';
+
+    strcpy(out,buff);
+}
 
 
 // random string generator
@@ -68,7 +84,7 @@ int main(){
         char *copy = "";
         for(int i=0; i<5; i++){
             char buf[10];
-            itoa(out+i,buf,10);
+            inttos(out+i,buf);
             strcat(copy,buf);
             strcat(copy,arr[i]);
         }
