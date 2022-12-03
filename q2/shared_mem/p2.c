@@ -83,7 +83,7 @@ int main(){
 
         // return the highest index received to p1
         char end[5] = "~";
-	char outind[5];
+	    char outind[5];
         inttos(max, outind);
         strcat(end,outind);
 

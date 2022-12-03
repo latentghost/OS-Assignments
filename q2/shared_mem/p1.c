@@ -8,7 +8,7 @@
 
 
 #define MEMSIZE 50
-#define READSIZE 5
+#define READSIZE 5*sizeof(char)
 #define ERR (char *)-1
 #define LEN 7
 #define ARRSIZE 50*sizeof(char *)
