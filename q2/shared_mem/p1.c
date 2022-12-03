@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 
 #define MEMSIZE 50
@@ -60,7 +61,6 @@ int main(){
 
     // define and attach to the shared memory
     key = ftok("mem",100);
-    // key = 9876;
 
     shmid = shmget(key, MEMSIZE, 0666 | IPC_CREAT);
 
@@ -81,9 +81,8 @@ int main(){
     
     while(out<50){
         
-        // concat 5 strings from the array (using 1-based indexing)
+        // concat 5 strings from the array
         char write[50];
-        char read[10];
         int max;
         for(int i=0; i<5; i++){
             char buf[5];
@@ -105,17 +104,19 @@ int main(){
             exit(EXIT_FAILURE);
         }
         else if (pid==0){
-            execlp("p2",NULL);
+            execl("./p2",NULL);
             exit(EXIT_SUCCESS);
         }
         else{
             wait(NULL);
-            int high = (int) (*wri - '0') + ((int) (*(wri+1)-'0'))*10;
+	    tmp = wri;
+            int high = (int) (*tmp - '0') + ((int) (*(tmp+1)-'0'))*10;
+	    printf("%i\n",high);
             if(high!=max){
-                printf("highest index received != highest index sent");
+                printf("highest index received != highest index sent\n");
                 exit(EXIT_FAILURE);
             }
-            else out = high;
+            out = high;
         }
         out++;
         
