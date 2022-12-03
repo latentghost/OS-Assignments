@@ -87,7 +87,7 @@ int main(){
         inttos(max, outind);
         strcat(end,outind);
 
-        memcpy(read,end,strlen(read)*sizeof(char));
+        memcpy(read,end,strlen(end)*sizeof(char));
 
         while(*read == '~'){
             sleep(1);
