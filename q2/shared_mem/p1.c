@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <unistd.h>
+#include <ctype.h>
 
 
 #define COPYSIZE 5*sizeof(char *)
