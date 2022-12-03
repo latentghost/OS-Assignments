@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 
-#define COPYSIZE 50
+#define MEMSIZE 50
 #define ERR (char *)-1
 #define LEN 7
 #define ARRSIZE 50*sizeof(char *)
@@ -60,7 +60,7 @@ int main(){
     // define and attach to the shared memory
     key = ftok("mem",100);
 
-    shmid = shmget(key, COPYSIZE, 0666 | IPC_CREAT);
+    shmid = shmget(key, MEMSIZE, 0666 | IPC_CREAT);
 
     if(shmid < 0){
         perror("shmget error");
@@ -93,7 +93,7 @@ int main(){
         // write the concatenated string into the shared memory
         memcpy(wri,copy,size * sizeof(char));
         tmp = wri;
-        tmp += COPYSIZE;
+        tmp += size;
 
         // denotes the end of the segment
         *tmp = '-';
@@ -102,6 +102,8 @@ int main(){
         while(*wri != '~'){
             sleep(1);
         }
+
+
     }
 
     char x[10];

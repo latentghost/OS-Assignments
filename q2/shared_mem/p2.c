@@ -20,7 +20,7 @@ int main(){
     char *read, *tmp;
 
     // define and attach to the shared memory
-    key = 101;
+    key = ftok("mem",100);
 
     shmid = shmget(key, COPYSIZE, 0666);
 
