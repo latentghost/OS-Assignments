@@ -65,7 +65,7 @@ int main(){
     while(out<50){
         
         // concat 5 strings from the array
-        char *write = "";
+        char *write;
         int max;
         for(int i=0; i<5; i++){
             char buf[2];
@@ -86,7 +86,7 @@ int main(){
         int size = strlen(write);
 
         // write the concatenated string into the shared memory
-        memset(read,'~',MEMSIZE*sizeof(char));
+        memset(wri,'~',MEMSIZE*sizeof(char));
         memcpy(wri,write,size * sizeof(char));
 
         pid_t pid = fork();
