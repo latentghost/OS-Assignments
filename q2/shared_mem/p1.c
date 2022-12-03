@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <unistd.h>
-#include <ctype.h>
+#include <math.h>
 
 
 #define COPYSIZE 5*sizeof(char *)
@@ -16,7 +16,7 @@
 
 // random string generator
 char *randomString(int length){
-    char *out = malloc(length*sizeof(char)), *string = "abcdefghijklmnopqrstuvwxyz";
+    char *out = malloc((length+1)*sizeof(char)), *string = "abcdefghijklmnopqrstuvwxyz";
     int a = (int) 'a';
 
     for (int i=0; i<length; i++){
@@ -24,6 +24,7 @@ char *randomString(int length){
         r = r%26;
         out[i] = string[r];
     }
+    out[length] = '\0';
 
     return out;
 }
