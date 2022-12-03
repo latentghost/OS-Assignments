@@ -58,12 +58,12 @@ int main(){
     }
 
     // define and attach to the shared memory
-    key = 101;
+    key = ftok("mem",100);
 
     shmid = shmget(key, COPYSIZE, 0666 | IPC_CREAT);
 
     if(shmid < 0){
-        perror("shmid error");
+        perror("shmget error");
         exit(EXIT_FAILURE);
     }
 
