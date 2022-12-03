@@ -24,7 +24,6 @@ void inttos(int n, char *out){
         i++;
         n = n/10;
     }
-    buff[i] = '\0';
 
     strcpy(out,buff);
 }
@@ -83,7 +82,8 @@ int main(){
         }
 
         // return the highest index received to p1
-        char *end = "~", *outind = "";
+        char end[5] = "~";
+	char outind[5];
         inttos(max, outind);
         strcat(end,outind);
 
