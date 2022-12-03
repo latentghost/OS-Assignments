@@ -102,6 +102,11 @@ int main(){
             sleep(1);
         }
     }
+
+    char x[10];
+    int n = 12;
+    inttos(n,x);
+    printf("%s\n",x);
     
     return 0;
 
