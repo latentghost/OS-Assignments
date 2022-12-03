@@ -10,11 +10,11 @@
 #define SIZE 5
 #define LEN 7L
 #define ARRSIZE 45*sizeof(char)
-#define NAME "p1socket"
+#define NAME "csock"
 
 
 int d, c, s, r;
-struct sockaddr addr;
+struct sockaddr_un addr;
 socklen_t length;
 
 int main(){
@@ -27,23 +27,23 @@ int main(){
         exit(EXIT_FAILURE);
     }
 
-    addr.sa_family = AF_UNIX;
-    strcpy(addr.sa_data,NAME);
+    addr.sun_family = AF_UNIX;
+    strcpy(addr.sun_path,NAME);
 
-    length = strlen(NAME) + sizeof(AF_UNIX);
-
-    c = connect(d, &addr, length);
+    c = connect(d, (struct sockaddr *) &addr, SUN_LEN(&addr));
     if(c<0){
         perror("p2 - connect error");
         exit(EXIT_FAILURE);
     }
 
-    FILE *f = fdopen(d, "r+");
+    //FILE *f = fdopen(d, "r+");
 
-    r = recv(d, arr, ARRSIZE, 0);
+    r = recv(d, arr, sizeof(arr), 0);
 
     printf("%s\n",arr);
 
     close(d);
+
+    unlink(NAME);
 
 }

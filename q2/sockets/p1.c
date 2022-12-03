@@ -10,7 +10,7 @@
 #define SIZE 5
 #define LEN 7L
 #define ARRSIZE 50*sizeof(char *)
-#define NAME "p1socket"
+#define NAME "csock"
 
 
 // random string generator
@@ -30,8 +30,8 @@ char *randomString(int length){
 
 int d, b, l, c, s;
 int p2s;
-struct sockaddr addr, p2addr;
-socklen_t length, p2length;
+struct sockaddr_un addr;
+socklen_t length;
 
 int main(){
 
@@ -48,12 +48,10 @@ int main(){
         exit(EXIT_FAILURE);
     }
 
-    addr.sa_family = AF_UNIX;
-    strcpy(addr.sa_data,NAME);
+    addr.sun_family = AF_UNIX;
+    strcpy(addr.sun_path,NAME);
 
-    length = strlen(NAME) + sizeof(AF_UNIX);
-
-    b = bind(d, &addr, length);
+    b = bind(d, (struct sockaddr *) &addr, SUN_LEN(&addr));
     if(b<0){
         perror("p1 - bind error");
         exit(EXIT_FAILURE);
@@ -65,18 +63,20 @@ int main(){
         exit(EXIT_FAILURE);
     }
 
-    p2s = accept(d, &p2addr, &p2length);
+    p2s = accept(d, NULL, NULL);
     if(p2s<0){
         perror("p1 - accept error");
         exit(EXIT_FAILURE);
     }
 
-    FILE *f = fdopen(p2s, "r+");
+    //FILE *f = fdopen(p2s, "r+");
 
     for(int i=0; i<SIZE; i++){
-        s = send(p2s, arr[i], LEN, 0);
+        s = send(p2s, arr[i], sizeof(arr[i]), 0);
     }
 
     close(d);
+
+    unlink(NAME);
 
 }
