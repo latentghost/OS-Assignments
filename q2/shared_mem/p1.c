@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 
-#define COPYSIZE 5*sizeof(char *)
+#define COPYSIZE 50
 #define ERR (char *)-1
 #define LEN 7
 #define ARRSIZE 50*sizeof(char *)
@@ -40,7 +40,6 @@ char *randomString(int length){
         r = r%26;
         out[i] = string[r];
     }
-    out[length] = '\0';
 
     return out;
 }
@@ -79,9 +78,9 @@ int main(){
     int out = 1;
     
     while(out<=50){
-
+        
         // concat 5 strings from the array
-        char *copy = "";
+        char copy[50];
         for(int i=0; i<5; i++){
             char buf[10];
             inttos(out+i,buf);
@@ -89,8 +88,10 @@ int main(){
             strcat(copy,arr[i]);
         }
 
+        int size = strlen(copy);
+
         // write the concatenated string into the shared memory
-        memcpy(wri,copy,COPYSIZE);
+        memcpy(wri,copy,size * sizeof(char));
         tmp = wri;
         tmp += COPYSIZE;
 
