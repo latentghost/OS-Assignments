@@ -7,10 +7,27 @@
 #include <unistd.h>
 
 
-#define COPYSIZE 5*sizeof(char *)
+#define MEMSIZE 50
 #define ERR (char *)-1
 #define LEN 7
 #define ARRSIZE 50*sizeof(char *)
+
+
+// convert int to string
+void inttos(int n, char *out){
+    char buff[5];
+    int x = (int) '0';
+    int i = 0;
+    while (n>0){
+        int a = n%10;
+        buff[i] = (char) (a + x);
+        i++;
+        n = n/10;
+    }
+    buff[i] = '\0';
+
+    strcpy(out,buff);
+}
 
 
 int main(){
@@ -22,7 +39,7 @@ int main(){
     // define and attach to the shared memory
     key = ftok("mem",100);
 
-    shmid = shmget(key, COPYSIZE, 0666);
+    shmid = shmget(key, MEMSIZE, 0666);
 
     if(shmid < 0){
         perror("shmid error");
@@ -36,14 +53,47 @@ int main(){
         exit(EXIT_FAILURE);
     }
 
-    // read data from the shared memory
-    for(tmp = read; *tmp != '-'; tmp += 1){
-         printf("%c",*tmp);
+    // read and print data from the shared memory
+    while(*read != '0'){   
+        tmp = read;
+        int ind = 0;
+        while(*tmp!='-'){
+            
+            // print index
+            int i = 1;
+            while(((int) (*tmp - '0')) < 10){
+                printf("%c",*tmp);
+                ind += ((int) (*tmp - '0'))*i;
+                i*=10;
+                tmp++;
+            }
+
+            printf(" ");
+
+            // print the string
+            while(((int) (*tmp - '0')) >= 10){
+                printf("%c",*tmp);
+                tmp++;
+            }
+
+            // only store the last index
+            if(*tmp!='-') ind = 0;
+
+            printf("\n");
+        }
+
+        // return the highest index received to p1
+        char *end = "~";
+        char *outind = malloc(sizeof(char *));
+        inttos(ind, outind);
+        strcat(end,outind);
+
+        memcpy(read,end,strlen(read)*sizeof(char));
+
+        while(*read == '~'){
+            sleep(1);
+        }
     }
-
-    printf("\n");
-
-    *tmp = '~';
     
     return 0;
 

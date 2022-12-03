@@ -8,6 +8,7 @@
 
 
 #define MEMSIZE 50
+#define READSIZE 5
 #define ERR (char *)-1
 #define LEN 7
 #define ARRSIZE 50*sizeof(char *)
@@ -15,7 +16,7 @@
 
 // convert int to string
 void inttos(int n, char *out){
-    char buff[10];
+    char buff[5];
     int x = (int) '0';
     int i = 0;
     while (n>0){
@@ -79,10 +80,10 @@ int main(){
     
     while(out<=50){
         
-        // concat 5 strings from the array
+        // concat 5 strings from the array (using 1-based indexing)
         char copy[50];
         for(int i=0; i<5; i++){
-            char buf[10];
+            char buf[5];
             inttos(out+i,buf);
             strcat(copy,buf);
             strcat(copy,arr[i]);
@@ -103,13 +104,14 @@ int main(){
             sleep(1);
         }
 
+        char read[5];
+        memcpy(read,wri,READSIZE);
 
+        out = 1 + ((int) (read[1]-'0')) + ((int) (read[2]-'0'))*10;
     }
 
-    char x[10];
-    int n = 12;
-    inttos(n,x);
-    printf("%s\n",x);
+    tmp = wri;
+    *wri = '0';
     
     return 0;
 
