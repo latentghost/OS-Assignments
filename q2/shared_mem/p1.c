@@ -28,7 +28,10 @@ void inttos(int n, char *out){
     }
     buff[i] = '\0';
 
-    char *y = strrev(buff);
+    char y[strlen(buff)];
+    for(int i=0; i<strlen(buff); i++){
+        y[strlen(y) - 1 - i] = buff[i];
+    }
 
     strcpy(out,y);
 }
