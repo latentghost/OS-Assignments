@@ -25,7 +25,12 @@ void inttos(int n, char *out){
         n = n/10;
     }
 
-    strcpy(out,buff);
+    char y[strlen(buff)];
+    for(int i=0; i<strlen(buff); i++){
+        y[strlen(y) - 1 - i] = buff[i];
+    }
+
+    strcpy(out,y);
 }
 
 
@@ -60,9 +65,9 @@ int main(){
         
         // print index
         int ind = 0;
-        while(((int) (*tmp - '0')) < 10){
+        while((int)*tmp>47 && (int)*tmp<58){
             ind *= 10;
-            ind += ((int) (*tmp - '0'));
+            ind += (int) *tmp - 48;
             tmp++;
         }
 
@@ -83,7 +88,7 @@ int main(){
     // return the highest index received to p1
     char outind[5];
     inttos(max, outind);
-    memset(read,'0',MEMSIZE*sizeof(char));
+    memset(read,'~',MEMSIZE*sizeof(char));
     memcpy(read,outind,strlen(outind)*sizeof(char));
 
     shmdt(read);

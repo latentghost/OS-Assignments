@@ -26,7 +26,6 @@ void inttos(int n, char *out){
         i++;
         n = n/10;
     }
-    buff[i] = '\0';
 
     char y[strlen(buff)];
     for(int i=0; i<strlen(buff); i++){
@@ -115,11 +114,14 @@ int main(){
         }
         else{
             wait(NULL);
-	        tmp = wri;
-            char high = *tmp;
-            char hi = (char) ((int) '0' + max);
-	        printf("%c\n",hi);
-            if(high!=hi){
+	        int high = 0;
+            tmp = wri;
+            while((int)*tmp>47 && (int)*tmp<58){
+                high *= 10;
+                high += (int) *tmp - 48;
+                tmp++;
+            }
+            if(high!=max){
                 printf("highest index received != highest index sent\n");
                 exit(EXIT_FAILURE);
             }
