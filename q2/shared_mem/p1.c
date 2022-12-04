@@ -27,10 +27,10 @@ void inttos(int n, char *out){
         n = n/10;
     }
 
-    // char y[strlen(buff)];
-    // for(int i=0; i<strlen(buff); i++){
-    //     y[strlen(y) - 1 - i] = buff[i];
-    // }
+    char y[i];
+    for(int j=0; j<i; j++){
+        y[j] = buff[j];
+    }
 
     strcpy(out,buff);
 }

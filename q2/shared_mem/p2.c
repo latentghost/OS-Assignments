@@ -25,9 +25,9 @@ void inttos(int n, char *out){
         n = n/10;
     }
 
-    char y[strlen(buff)];
-    for(int i=0; i<strlen(buff); i++){
-        y[strlen(y) - 1 - i] = buff[i];
+    char y[i];
+    for(int j=0; j<i; j++){
+        y[j] = buff[j];
     }
 
     strcpy(out,y);
@@ -64,15 +64,16 @@ int main(){
     for(int j=0; j<5; j++){
         
         // print index
-        int ind = 0, i = 1;
-        while((int)*tmp>47 && (int)*tmp<58){
-            ind *= i;
-            ind += (int) *tmp - 48;
-            i *= 10;
+        printf("%c",*tmp);
+        int ind = ((int) (*tmp)) - 48;
+        tmp++;
+        if(((int)*tmp)>=48 && ((int)*tmp)<=57){
+            printf("%c",*tmp);
+            ind += 10*(((int) (*tmp)) - 48);
             tmp++;
         }
 
-        printf("%i ",ind);
+        printf(" ");
 
         // print the string
         for(int i=0; i<LEN; i++){
