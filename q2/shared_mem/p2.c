@@ -85,6 +85,7 @@ int main(){
 	    char outind[5];
         inttos(max, outind);
 
+        memset(read,NULL,MEMSIZE*sizeof(char));
         memcpy(read,outind,strlen(outind)*sizeof(char));
 
     }
