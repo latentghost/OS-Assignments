@@ -13,27 +13,6 @@
 #define ARRSIZE 50*sizeof(char *)
 
 
-// convert int to string
-void inttos(int n, char *out){
-    char buff[5];
-    int x = (int) '0';
-    int i = 0;
-    while (n>0){
-        int a = n%10;
-        buff[i] = (char) (a + x);
-        i++;
-        n = n/10;
-    }
-
-    char y[i];
-    for(int j=0; j<i; j++){
-        y[j] = buff[j];
-    }
-
-    strcpy(out,y);
-}
-
-
 int main(){
 
     // variable prototypes
@@ -41,8 +20,7 @@ int main(){
     char *read, *tmp;
 
     // define and attach to the shared memory
-    // key = ftok("mem",100);
-    key = 9876;
+    key = 2121;
 
     shmid = shmget(key, MEMSIZE, 0666);
 
@@ -69,7 +47,7 @@ int main(){
         tmp++;
         if(((int)*tmp)>=48 && ((int)*tmp)<=57){
             printf("%c",*tmp);
-            ind += 10*(((int) (*tmp)) - 48);
+            ind += 10*((int) *tmp - 48);
             tmp++;
         }
 
@@ -78,8 +56,8 @@ int main(){
         // print the string
         for(int i=0; i<LEN; i++){
             printf("%c",*(tmp+i));
+            tmp++;
         }
-        tmp += LEN;
 
         // only store the last index
         if(ind>max) max = ind;
@@ -88,8 +66,8 @@ int main(){
     }
 
     // return the highest index received to p1
-    char outind[5];
-    inttos(max, outind);
+    char *outind;
+
     memset(read,'~',MEMSIZE*sizeof(char));
     memcpy(read,outind,strlen(outind)*sizeof(char));
 

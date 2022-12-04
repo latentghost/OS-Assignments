@@ -15,27 +15,6 @@
 #define ARRSIZE 50*sizeof(char *)
 
 
-// convert int to string
-void inttos(int n, char *out){
-    char buff[5];
-    int x = (int) '0';
-    int i = 0;
-    while (n>0){
-        int a = n%10;
-        buff[i] = (char) (a + x);
-        i++;
-        n = n/10;
-    }
-
-    char y[i];
-    for(int j=0; j<i; j++){
-        y[j] = buff[j];
-    }
-
-    strcpy(out,buff);
-}
-
-
 // random string generator
 char *randomString(int length){
     char *out = malloc((length+1)*sizeof(char)), *string = "abcdefghijklmnopqrstuvwxyz";
@@ -64,8 +43,7 @@ int main(){
     }
 
     // define and attach to the shared memory
-    // key = ftok("mem",100);
-    key = 9876;
+    key = 2121;
 
     shmid = shmget(key, MEMSIZE, 0666 | IPC_CREAT);
 
@@ -87,12 +65,20 @@ int main(){
     while(out<50){
         
         // concat 5 strings from the array
-        char write[50];
+        char *write = "";
         int max;
         for(int i=0; i<5; i++){
-            char buf[5];
-            inttos(out+i,buf);
-            strcat(write,buf);
+            char buf[2];
+            char buff[1];
+            if(out+i<10){
+                buff[0] = (char) (out + i + 48);
+                strcat(write,buff);
+            }
+            else{
+                buf[1] = (char) ((out + i)%10 + 48);
+                buf[0] = (char) ((out + i)/10 + 48);
+                strcat(write,buf);
+            }
             strcat(write,arr[out+i]);
             max = out+i;
         }
@@ -100,6 +86,7 @@ int main(){
         int size = strlen(write);
 
         // write the concatenated string into the shared memory
+        memset(read,'~',MEMSIZE*sizeof(char));
         memcpy(wri,write,size * sizeof(char));
 
         pid_t pid = fork();
@@ -115,11 +102,17 @@ int main(){
         else{
             wait(NULL);
             tmp = wri;
-	        int high = 0, i = 1;
-            while((int)*tmp>47 && (int)*tmp<58){
-                high *= i;
-                high += (int) *tmp - 48;
-                i *= 10;
+	        int high;
+            if(*tmp=='~'){
+                tmp++;
+                high = ((int) *tmp - 48);
+                tmp++;
+            }
+            else{
+                int d1 = ((int) *tmp - 48) * 10;
+                tmp++;
+                int d2 = ((int) *tmp - 48);
+                high = d1+d2;
                 tmp++;
             }
             if(high!=max){
