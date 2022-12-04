@@ -60,56 +60,65 @@ int main(){
 
     // define and attach to the shared memory
     key = ftok("mem",100);
+    // key = 9876;
 
     shmid = shmget(key, MEMSIZE, 0666 | IPC_CREAT);
 
     if(shmid < 0){
-        perror("shmget error");
+        perror("p1 - shmget error");
         exit(EXIT_FAILURE);
     }
 
     wri = shmat(shmid, (void *)0, 0);
 
     if(wri == ERR){
-        perror("shmat error");
+        perror("p1 - shmat error");
         exit(EXIT_FAILURE);
     }
 
     
-    int out = 1;
+    int out = 0;
     
-    while(out<=50){
+    while(out<50){
         
         // concat 5 strings from the array (using 1-based indexing)
-        char copy[50];
+        char write[50];
+        char read[10];
+        int max;
         for(int i=0; i<5; i++){
             char buf[5];
             inttos(out+i,buf);
-            strcat(copy,buf);
-            strcat(copy,arr[i]);
+            strcat(write,buf);
+            strcat(write,arr[i]);
+            max = out+i;
         }
 
-        int size = strlen(copy);
+        int size = strlen(write);
 
         // write the concatenated string into the shared memory
-        memcpy(wri,copy,size * sizeof(char));
-        tmp = wri;
-        tmp += size;
+        memcpy(wri,write,size * sizeof(char));
 
-        // denotes the end of the segment
-        *tmp = '-';
+        pid_t pid = fork();
 
-        // wait for the consumer to read the shared memory
-        while(*wri != '~'){
-            sleep(1);
+        if(pid<0){
+            perror("p1 - fork error");
+            exit(EXIT_FAILURE);
         }
-
-        char read[5];
-        memcpy(read,wri,READSIZE);
-
-        out = 1 + ((int) (read[1]-'0')) + ((int) (read[2]-'0'))*10;
-
-        execl("/home/latentghost/os_assignments/q2/shared_mem/p2",NULL);
+        else if (pid==0){
+            execlp("p2",NULL);
+            exit(EXIT_SUCCESS);
+        }
+        else{
+            wait(NULL);
+            int high = (int) (*wri - '0') + ((int) (*(wri+1)-'0'))*10;
+            if(high!=max){
+                printf("highest index received != highest index sent");
+                exit(EXIT_FAILURE);
+            }
+            else out = high;
+        }
+        out++;
+        
     }
 
     tmp = wri;

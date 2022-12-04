@@ -37,6 +37,7 @@ int main(){
 
     // define and attach to the shared memory
     key = ftok("mem",100);
+    // key = 9876;
 
     shmid = shmget(key, MEMSIZE, 0666);
 
@@ -61,13 +62,12 @@ int main(){
             // print index
             int i = 1, ind = 0;
             while(((int) (*tmp - '0')) < 10){
-                printf("%c",*tmp);
                 ind += ((int) (*tmp - '0'))*i;
                 i*=10;
                 tmp++;
             }
 
-            printf(" ");
+            printf("%i ",ind);
 
             // print the string
             for(int i=0; i<LEN; i++){
@@ -82,18 +82,10 @@ int main(){
         }
 
         // return the highest index received to p1
-        char end[5] = "~";
 	    char outind[5];
         inttos(max, outind);
-        strcat(end,outind);
 
-        memcpy(read,end,strlen(end)*sizeof(char));
-
-        execl("/home/latentghost/os_assignments/q2/shared_mem/p1",NULL);
-
-        while(*read == '~'){
-            sleep(1);
-        }
+        memcpy(read,outind,strlen(outind)*sizeof(char));
 
     }
     
