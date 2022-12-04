@@ -36,8 +36,8 @@ int main(){
     char *read, *tmp;
 
     // define and attach to the shared memory
-    key = ftok("mem",100);
-    // key = 9876;
+    // key = ftok("mem",100);
+    key = 9876;
 
     shmid = shmget(key, MEMSIZE, 0666);
 
@@ -53,43 +53,41 @@ int main(){
         exit(EXIT_FAILURE);
     }
 
-    // read and print data from the shared memory
-    while(*read != '0'){   
-        tmp = read;
-        int max = 0;
-        while(*tmp!='-'){
-            
-            // print index
-            int i = 1, ind = 0;
-            while(((int) (*tmp - '0')) < 10){
-                ind += ((int) (*tmp - '0'))*i;
-                i*=10;
-                tmp++;
-            }
-
-            printf("%i ",ind);
-
-            // print the string
-            for(int i=0; i<LEN; i++){
-                printf("%c",*(tmp+i));
-            }
-            tmp += LEN;
-
-            // only store the last index
-            if(ind>max) max = ind;
-
-            printf("\n");
+    // read and print data from the shared memory 
+    tmp = read;
+    int max = 0;
+    for(int j=0; j<5; j++){
+        
+        // print index
+        int i = 1, ind = 0;
+        while(((int) (*tmp - '0')) < 10){
+            ind += ((int) (*tmp - '0'))*i;
+            i*=10;
+            tmp++;
         }
 
-        // return the highest index received to p1
-	    char outind[5];
-        inttos(max, outind);
+        printf("%i ",ind);
 
-        memset(read,'0',MEMSIZE*sizeof(char));
-        memcpy(read,outind,strlen(outind)*sizeof(char));
+        // print the string
+        for(int i=0; i<LEN; i++){
+            printf("%c",*(tmp+i));
+        }
+        tmp += LEN;
 
+        // only store the last index
+        if(ind>max) max = ind;
+
+        printf("\n");
     }
-    
+
+    // return the highest index received to p1
+    char outind[5];
+    inttos(max, outind);
+    memset(read,'0',MEMSIZE*sizeof(char));
+    memcpy(read,outind,strlen(outind)*sizeof(char));
+
+    shmdt(read);
+
     return 0;
 
 }

@@ -60,7 +60,8 @@ int main(){
     }
 
     // define and attach to the shared memory
-    key = ftok("mem",100);
+    // key = ftok("mem",100);
+    key = 9876;
 
     shmid = shmget(key, MEMSIZE, 0666 | IPC_CREAT);
 
@@ -88,7 +89,7 @@ int main(){
             char buf[5];
             inttos(out+i,buf);
             strcat(write,buf);
-            strcat(write,arr[i]);
+            strcat(write,arr[out+i]);
             max = out+i;
         }
 
@@ -109,14 +110,15 @@ int main(){
         }
         else{
             wait(NULL);
-	    tmp = wri;
-            int high = (int) (*tmp - '0') + ((int) (*(tmp+1)-'0'))*10;
-	    printf("%i\n",high);
-            if(high!=max){
+	        tmp = wri;
+            char high = *tmp;
+            char hi = (char) ((int) '0' + max);
+	        printf("%c\n",hi);
+            if(high!=hi){
                 printf("highest index received != highest index sent\n");
                 exit(EXIT_FAILURE);
             }
-            out = high;
+            out = max;
         }
         out++;
         
