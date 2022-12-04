@@ -59,10 +59,10 @@ int main(){
     for(int j=0; j<5; j++){
         
         // print index
-        int i = 1, ind = 0;
+        int ind = 0;
         while(((int) (*tmp - '0')) < 10){
-            ind += ((int) (*tmp - '0'))*i;
-            i*=10;
+            ind *= 10;
+            ind += ((int) (*tmp - '0'));
             tmp++;
         }
 

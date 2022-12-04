@@ -28,7 +28,9 @@ void inttos(int n, char *out){
     }
     buff[i] = '\0';
 
-    strcpy(out,buff);
+    char *x = strrev(buff);
+
+    strcpy(out,x);
 }
 
 
