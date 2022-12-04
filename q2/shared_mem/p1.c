@@ -65,7 +65,7 @@ int main(){
     while(out<50){
         
         // concat 5 strings from the array
-        char *write;
+        char *write = "";
         int max;
         for(int i=0; i<5; i++){
             char buf[2];
