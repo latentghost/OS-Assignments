@@ -14,7 +14,7 @@
 
 
 int d, c, s, r;
-struct sockaddr_un addr;
+struct sockaddr addr;
 socklen_t length;
 
 int main(){
@@ -27,8 +27,8 @@ int main(){
         exit(EXIT_FAILURE);
     }
 
-    addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path,NAME);
+    addr.sa_family = AF_UNIX;
+    strcpy(addr.sa_data,NAME);
 
     length = strlen(NAME) + sizeof(AF_UNIX);
 

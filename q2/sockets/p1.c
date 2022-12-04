@@ -30,7 +30,7 @@ char *randomString(int length){
 
 int d, b, l, c, s;
 int p2s;
-struct sockaddr_un addr, p2addr;
+struct sockaddr addr, p2addr;
 socklen_t length, p2length;
 
 int main(){
@@ -48,8 +48,8 @@ int main(){
         exit(EXIT_FAILURE);
     }
 
-    addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path,NAME);
+    addr.sa_family = AF_UNIX;
+    strcpy(addr.sa_data,NAME);
 
     length = strlen(NAME) + sizeof(AF_UNIX);
 
