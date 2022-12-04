@@ -27,12 +27,12 @@ void inttos(int n, char *out){
         n = n/10;
     }
 
-    char y[strlen(buff)];
-    for(int i=0; i<strlen(buff); i++){
-        y[strlen(y) - 1 - i] = buff[i];
-    }
+    // char y[strlen(buff)];
+    // for(int i=0; i<strlen(buff); i++){
+    //     y[strlen(y) - 1 - i] = buff[i];
+    // }
 
-    strcpy(out,y);
+    strcpy(out,buff);
 }
 
 
@@ -114,11 +114,12 @@ int main(){
         }
         else{
             wait(NULL);
-	        int high = 0;
             tmp = wri;
+	        int high = 0, i = 1;
             while((int)*tmp>47 && (int)*tmp<58){
-                high *= 10;
+                high *= i;
                 high += (int) *tmp - 48;
+                i *= 10;
                 tmp++;
             }
             if(high!=max){

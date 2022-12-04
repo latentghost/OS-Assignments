@@ -64,10 +64,11 @@ int main(){
     for(int j=0; j<5; j++){
         
         // print index
-        int ind = 0;
+        int ind = 0, i = 1;
         while((int)*tmp>47 && (int)*tmp<58){
-            ind *= 10;
+            ind *= i;
             ind += (int) *tmp - 48;
+            i *= 10;
             tmp++;
         }
 
