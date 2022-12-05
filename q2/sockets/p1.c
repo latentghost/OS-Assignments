@@ -7,9 +7,10 @@
 #include <unistd.h>
 
 
-#define SIZE 5
-#define LEN 7L
+#define LEN 7
 #define ARRSIZE 50*sizeof(char *)
+#define SENDSIZE 100*sizeof(char)
+#define RECSIZE 3*sizeof(char)
 #define NAME "csock"
 
 
@@ -28,12 +29,12 @@ char *randomString(int length){
 }
 
 
-int d, b, l, c, s;
+int d, b, l, c, s, r;
 int p2s;
-struct sockaddr_un addr;
-socklen_t length;
+struct sockaddr_un addr, newaddr;
+socklen_t length, newlen;
 
-int main(){
+int main(int argc, char *argv[]){
 
     char **arr = (char **) malloc(ARRSIZE);
 
@@ -47,6 +48,7 @@ int main(){
         perror("p1 - socket error");
         exit(EXIT_FAILURE);
     }
+    unlink(NAME);
 
     addr.sun_family = AF_UNIX;
     strcpy(addr.sun_path,NAME);
@@ -57,22 +59,72 @@ int main(){
         exit(EXIT_FAILURE);
     }
 
-    l = listen(d, 1);
-    if(l<0){
-        perror("p1 - listen error");
-        exit(EXIT_FAILURE);
-    }
+    // send and receive data through socket
+    int out = 0;
+    while(out < 50){
 
-    p2s = accept(d, NULL, NULL);
-    if(p2s<0){
-        perror("p1 - accept error");
-        exit(EXIT_FAILURE);
-    }
+        l = listen(d, 5);
+        if(l<0){
+            perror("p1 - listen error");
+            exit(EXIT_FAILURE);
+        }
 
-    //FILE *f = fdopen(p2s, "r+");
+        p2s = accept(d, NULL, NULL);
+        if(p2s<0){
+            perror("p1 - accept error");
+            exit(EXIT_FAILURE);
+        }
 
-    for(int i=0; i<SIZE; i++){
-        s = send(p2s, arr[i], sizeof(arr[i]), 0);
+        // send and receive data
+        char *data = malloc(SENDSIZE);
+        size_t len = 0;
+        int max = -1;
+        for(int i=0; i<5; i++){
+            char buf[3];
+            char buff[2];
+            if(out+i<10){
+                buff[0] = (char) (out + i + 48);
+                buff[1] = '\0';
+                strcat(data,buff);
+                len += strlen(buff);
+            }
+            else{
+                buf[1] = (char) ((out + i)%10 + 48);
+                buf[0] = (char) ((out + i)/10 + 48);
+                buf[2] = '\0';
+                strcat(data,buf);
+                len += strlen(buf);
+            }
+            strcat(data,arr[out+i]);
+            len += strlen(arr[out+i]);
+            if(out+i>max) max = out+i;
+        }
+
+        s = send(p2s, data, len, 0);
+        
+        char *returnind = malloc(RECSIZE);
+        size_t slen = 3;
+        r = recv(p2s, returnind, slen, 0);
+
+        // check highest index sent = highest index received
+        char *tmp = returnind;
+        int ind = (int) (*tmp);
+        ind -= 48;
+        tmp++;
+        int j = (int) (*tmp);
+        if(j>=48 && j<=57){
+            ind *= 10;
+            ind += j-48;
+        }
+
+        if(max!=ind){
+            printf("highest index received != highest index sent\n");
+            exit(EXIT_FAILURE);
+        }
+
+        out = max;
+        out++;
+
     }
 
     close(d);
