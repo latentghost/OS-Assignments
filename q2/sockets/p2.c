@@ -68,17 +68,23 @@ int main(){
         if(in>min) min = in;
     }
 
-    char out[3];
-    out[2] = '~';
+    char snd[3];
+    snd[2] = '~';
+
+    out = min;
+
     if(min<10){
-        out[1] = '~';
-        out[0] = (char) (min + 48);
+        snd[1] = '~';
+        snd[0] = (char) (min + 48);
     }
     else{
-        out[1] = (char) (min%10 + 48);
-        out[0] = (char) (min/10 + 48);
+        snd[1] = (char) (min%10 + 48);
+        snd[0] = (char) (min/10 + 48);
     }
 
-    s = send(d, out, strlen(out), 0);
+    s = send(d, snd, strlen(snd), 0);
+
+    close(d);
+    unlink(NAME);
 
 }
