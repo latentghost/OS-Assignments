@@ -71,8 +71,6 @@ int main(){
     char snd[3];
     snd[2] = '~';
 
-    out = min;
-
     if(min<10){
         snd[1] = '~';
         snd[0] = (char) (min + 48);
