@@ -10,6 +10,7 @@
 
 #define MEMSIZE 50
 #define READSIZE 5*sizeof(char)
+#define SENDSIZE 100*sizeof(char)
 #define ERR (char *)-1
 #define LEN 7
 #define ARRSIZE 50*sizeof(char *)
@@ -65,11 +66,11 @@ int main(){
     while(out<50){
         
         // concat 5 strings from the array
-        char *write = "";
+        char *write = malloc(SENDSIZE);
         int max;
         for(int i=0; i<5; i++){
-            char buf[2];
-            char buff[1];
+            char buf[3];
+            char buff[2];
             if(out+i<10){
                 buff[0] = (char) (out + i + 48);
                 strcat(write,buff);
@@ -79,15 +80,17 @@ int main(){
                 buf[0] = (char) ((out + i)/10 + 48);
                 strcat(write,buf);
             }
+
             strcat(write,arr[out+i]);
             max = out+i;
+
         }
 
         int size = strlen(write);
 
         // write the concatenated string into the shared memory
         memset(wri,'~',MEMSIZE*sizeof(char));
-        memcpy(wri,write,size * sizeof(char));
+        memcpy(wri,write,SENDSIZE);
 
         pid_t pid = fork();
 
@@ -101,21 +104,17 @@ int main(){
         }
         else{
             wait(NULL);
-            tmp = wri;
-	        int high;
-            if(*tmp=='~'){
-                tmp++;
-                high = ((int) *tmp - 48);
-                tmp++;
+	        char *t = wri;
+            int ind = (int) (*t);
+            ind -= 48;
+            t++;
+            int j = (int) (*t);
+            if(j>=48 && j<=57){
+                ind *= 10;
+                ind += j-48;
             }
-            else{
-                int d1 = ((int) *tmp - 48) * 10;
-                tmp++;
-                int d2 = ((int) *tmp - 48);
-                high = d1+d2;
-                tmp++;
-            }
-            if(high!=max){
+            
+            if(ind!=max){
                 printf("highest index received != highest index sent\n");
                 exit(EXIT_FAILURE);
             }

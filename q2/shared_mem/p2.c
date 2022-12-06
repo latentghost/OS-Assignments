@@ -17,7 +17,7 @@ int main(){
 
     // variable prototypes
     int key,shmid;
-    char *read, *tmp;
+    char *read;
 
     // define and attach to the shared memory
     key = 2121;
@@ -37,36 +37,47 @@ int main(){
     }
 
     // read and print data from the shared memory 
-    tmp = read;
+    char *tmp = read;
     int max = 0;
     for(int j=0; j<5; j++){
         
         // print index
-        printf("%c",*tmp);
-        int ind = ((int) (*tmp)) - 48;
+        int ind = (int) (*tmp);
+        ind -= 48;
         tmp++;
-        if(((int)*tmp)>=48 && ((int)*tmp)<=57){
-            printf("%c",*tmp);
-            ind += 10*((int) *tmp - 48);
+        int j = (int) (*tmp);
+        if(j>=48 && j<=57){
+            ind *= 10;
+            ind += j-48;
             tmp++;
         }
 
-        printf(" ");
+        printf("%i ",ind);
 
         // print the string
         for(int i=0; i<LEN; i++){
-            printf("%c",*(tmp+i));
+            printf("%c",*(tmp));
             tmp++;
         }
 
         // only store the last index
         if(ind>max) max = ind;
-
         printf("\n");
     }
 
+    printf("\n");
+
     // return the highest index received to p1
-    char *outind;
+    char outind[3];
+    outind[2] = '\0';
+    if(max<10){
+        outind[0] = (char) (48 + max);
+        outind[1] = '~';
+    }
+    else{
+        outind[0] = (char) (48 + max/10);
+        outind[1] = (char) (48 + max%10);
+    }
 
     memset(read,'~',MEMSIZE*sizeof(char));
     memcpy(read,outind,strlen(outind)*sizeof(char));
