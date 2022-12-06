@@ -113,7 +113,7 @@ int main(){
                 ind *= 10;
                 ind += j-48;
             }
-            
+
             if(ind!=max){
                 printf("highest index received != highest index sent\n");
                 exit(EXIT_FAILURE);
@@ -121,6 +121,8 @@ int main(){
             out = max;
         }
         out++;
+
+        sleep(1);
         
     }
 
