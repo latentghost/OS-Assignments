@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
     for (int i=0; i<50; i++){
         arr[i] = randomString(LEN);
     }
-    
+
     d = socket(AF_UNIX,SOCK_STREAM,0);
     if(d<0){
         perror("p1 - socket error");
@@ -60,9 +60,19 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
 
-    // send and receive data through socket
+    // send and receive data
+    // char *ar = argv[1];
+    // int out = ((int) *ar) - 48;
+    // ar++;
+    // char q = *ar;
+    // int w = (int) q;
+    // if(q>=48 && q<=57){
+    //     out *= 10;
+    //     out += w - 48;
+    // }
+
     int out = 0;
-    while(out < 50){
+    while(out<50){
 
         l = listen(d, 5);
         if(l<0){
@@ -76,7 +86,6 @@ int main(int argc, char *argv[]){
             exit(EXIT_FAILURE);
         }
 
-        // send and receive data
         char *data = malloc(SENDSIZE);
         size_t len = 0;
         int max = -1;
@@ -102,7 +111,9 @@ int main(int argc, char *argv[]){
         }
 
         s = send(p2s, data, len, 0);
-        
+
+        // exec p2
+
         char *returnind = malloc(RECSIZE);
         size_t slen = 3;
         r = recv(p2s, returnind, slen, 0);
@@ -122,14 +133,13 @@ int main(int argc, char *argv[]){
             printf("highest index received != highest index sent\n");
             exit(EXIT_FAILURE);
         }
-
         out = max;
+
         out++;
 
     }
 
     close(d);
-
     unlink(NAME);
 
 }

@@ -83,6 +83,6 @@ int main(){
     s = send(d, snd, strlen(snd), 0);
 
     close(d);
-    unlink(NAME);
+    // unlink(NAME);
 
 }
