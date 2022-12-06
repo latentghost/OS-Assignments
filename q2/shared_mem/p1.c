@@ -126,8 +126,9 @@ int main(){
         
     }
 
-    tmp = wri;
-    *wri = '0';
+    shmdt(wri);
+
+    shmctl(shmid,0,NULL);
     
     return 0;
 
