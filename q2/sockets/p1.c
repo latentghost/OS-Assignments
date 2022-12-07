@@ -61,16 +61,6 @@ int main(int argc, char *argv[]){
     }
 
     // send and receive data
-    // char *ar = argv[1];
-    // int out = ((int) *ar) - 48;
-    // ar++;
-    // char q = *ar;
-    // int w = (int) q;
-    // if(q>=48 && q<=57){
-    //     out *= 10;
-    //     out += w - 48;
-    // }
-
     int out = 0;
     while(out<50){
 
@@ -141,5 +131,7 @@ int main(int argc, char *argv[]){
 
     close(d);
     unlink(NAME);
+    
+    return 0;
 
 }

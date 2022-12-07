@@ -40,49 +40,56 @@ int main(){
         exit(EXIT_FAILURE);
     }
 
-    r = recv(d, arr, SENDSIZE, 0);
-
-    char *tmp = arr;
     int min = -1;
 
-    for(int i=0; i<SIZE; i++){
-        int in = 0;
+    // while(min<50){
 
-        in += *tmp - '0';
-        tmp++;
-        if(*tmp>=48 && *tmp<=57){
-            in *= 10;
+        r = recv(d, arr, SENDSIZE, 0);
+
+        char *tmp = arr;
+
+        for(int i=0; i<SIZE; i++){
+            int in = 0;
+
             in += *tmp - '0';
             tmp++;
+            if(*tmp>=48 && *tmp<=57){
+                in *= 10;
+                in += *tmp - '0';
+                tmp++;
+            }
+
+            printf("%i ",in);
+
+            for(int j=0; j<LEN; j++){
+                printf("%c",*(tmp));
+                tmp++;
+            }
+
+            printf("\n");
+
+            if(in>min) min = in;
         }
 
-        printf("%i ",in);
+        char snd[3];
+        snd[2] = '~';
 
-        for(int j=0; j<LEN; j++){
-            printf("%c",*(tmp));
-            tmp++;
+        if(min<10){
+            snd[1] = '~';
+            snd[0] = (char) (min + 48);
+        }
+        else{
+            snd[1] = (char) (min%10 + 48);
+            snd[0] = (char) (min/10 + 48);
         }
 
-        printf("\n");
+        s = send(d, snd, strlen(snd), 0);
 
-        if(in>min) min = in;
-    }
-
-    char snd[3];
-    snd[2] = '~';
-
-    if(min<10){
-        snd[1] = '~';
-        snd[0] = (char) (min + 48);
-    }
-    else{
-        snd[1] = (char) (min%10 + 48);
-        snd[0] = (char) (min/10 + 48);
-    }
-
-    s = send(d, snd, strlen(snd), 0);
+    // }
 
     close(d);
     // unlink(NAME);
+
+    return 0;
 
 }
