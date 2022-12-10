@@ -13,6 +13,7 @@
 #define SENDSIZE 100*sizeof(char)
 #define RECSIZE 3*sizeof(char)
 #define NAME "csock"
+#define fr(i,a,b) for(int i=a; i<b; i++)
 
 
 // random string generator
@@ -20,7 +21,7 @@ char *randomString(int length){
     char *out = malloc((length+1)*sizeof(char)), *string = "abcdefghijklmnopqrstuvwxyz";
     int a = (int) 'a';
 
-    for (int i=0; i<length; i++){
+    fr(i,0,length){
         int r = rand();
         r = r%26;
         out[i] = string[r];
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]){
     char **arr = (char **) malloc(ARRSIZE);
 
     // populate array
-    for (int i=0; i<50; i++){
+    fr(i,0,50){
         arr[i] = randomString(LEN);
     }
 
@@ -79,7 +80,7 @@ int main(int argc, char *argv[]){
         char *data = malloc(SENDSIZE);
         size_t len = 0;
         int max = -1;
-        for(int i=0; i<5; i++){
+        fr(i,0,5){
             char buf[3];
             char buff[2];
             if(out+i<10){

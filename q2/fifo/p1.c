@@ -47,8 +47,6 @@ int main(){
 
     while(out < 50){
 
-        f = open(NAME, O_WRONLY);
-
         char *data = malloc(SENDSIZE);
         int max;
         for(int i=0; i<5; i++){
@@ -71,7 +69,9 @@ int main(){
 
         int size = strlen(data);
 
-        write(f, data, size+1);
+        f = open(NAME, O_WRONLY);
+
+        write(f, data, sizeof(data));
 
         close(f);
 

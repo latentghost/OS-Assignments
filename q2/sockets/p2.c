@@ -12,6 +12,7 @@
 #define ARRSIZE 45*sizeof(char)
 #define SENDSIZE 100*sizeof(char)
 #define NAME "csock"
+#define fr(i,a,b) for(int i=a; i<b; i++)
 
 
 int d, b, c, s, r;
@@ -42,13 +43,13 @@ int main(){
 
     int min = -1;
 
-    // while(min<50){
+    // while(1){
 
         r = recv(d, arr, SENDSIZE, 0);
 
         char *tmp = arr;
 
-        for(int i=0; i<SIZE; i++){
+        fr(i,0,SIZE){
             int in = 0;
 
             in += *tmp - '0';
@@ -61,7 +62,7 @@ int main(){
 
             printf("%i ",in);
 
-            for(int j=0; j<LEN; j++){
+            fr(j,0,LEN){
                 printf("%c",*(tmp));
                 tmp++;
             }
@@ -85,10 +86,12 @@ int main(){
 
         s = send(d, snd, strlen(snd), 0);
 
+        // if(min>=50) break;
+
     // }
 
     close(d);
-    // unlink(NAME);
+    unlink(NAME);
 
     return 0;
 

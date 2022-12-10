@@ -58,8 +58,6 @@ int main(){
 
         close(f);
 
-        f = open(NAME, O_WRONLY);
-
         printf("\n");
 
         // return the highest index received to p1
@@ -74,7 +72,9 @@ int main(){
             outind[1] = (char) (48 + max%10);
         }
 
-        write(f, outind, strlen(outind)+1);
+        f = open(NAME, O_WRONLY);
+
+        write(f, outind, sizeof(outind));
 
         // sleep(1);
 
