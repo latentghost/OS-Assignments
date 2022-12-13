@@ -86,6 +86,10 @@ int main(){
 
     close(d);
 
+    // separator
+    printf("\n");
+    sleep(1);
+
     return 0;
 
 }
