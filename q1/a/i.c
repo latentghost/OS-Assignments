@@ -9,32 +9,29 @@
 #define ui unsigned int
 #define ll long long
 #define fr(a,b,c) for(int a=b; a<c; a++)
+#define ITERS 1234
 
 
 // philosophers (threads) and picks (global variables)
-pthread_mutex_t picks[5];
+pthread_mutex_t lock;
 ll used[5];
 
 
-// sleep in milliseconds
-int msleep(ui n){ return usleep(n*1000); }
 
-
-// thread function
+// eat function
 void f1(int ind){
 
     int i = ind, j = (i+1)%5;
-    pthread_mutex_lock(&picks[i]);
-    pthread_mutex_lock(&picks[j]);
+    pthread_mutex_lock(&lock);
 
     usleep(50);
     used[i]++;
 
-    pthread_mutex_unlock(&picks[i]);
-    pthread_mutex_unlock(&picks[j]);
+    pthread_mutex_unlock(&lock);
 
 }
 
+// think function
 void f2(void *ind){
     usleep(5);
     return;
@@ -45,24 +42,24 @@ int main(){
 
     pthread_t phils[NUM];
 
-    fr(i,0,5){
-        pthread_mutex_init(&picks[i],NULL);
-        used[i] = 0L;
-    }
+    pthread_mutex_init(&lock,NULL);
 
-    fr(j,0,396){
+    fr(j,0,ITERS){
 
         fr(i,0,5){
+            // eat
             if(pthread_create(&phils[i],NULL,(void *)f1,(int *) i)){
                 perror("pthread_create error");
                 exit(EXIT_FAILURE);
             }
+            //think
             if(pthread_create(&phils[i],NULL,(void *)f2,(int *) i)){
                 perror("pthread_create error");
                 exit(EXIT_FAILURE);
             }
         }
 
+        // join threads
         fr(i,0,5){
             if(pthread_join(phils[i],NULL)){
                 perror("pthread_join error");
@@ -72,8 +69,7 @@ int main(){
     }
 
     // pthread_mutex_destroy(&stop);
-    fr(i,0,5)
-        pthread_mutex_destroy(&picks[i]);
+    pthread_mutex_destroy(&lock);
 
     fr(i,0,5)
         printf("%i %lli\n",i, used[i]);
