@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <semaphore.h>
 #include <unistd.h>
 
 
@@ -8,28 +9,33 @@
 #define ui unsigned int
 #define ll long long
 #define fr(a,b,c) for(int a=b; a<c; a++)
-#define ITERS 1234
+#define ITERS 1
 
 
 // forks (global variables)
-pthread_mutex_t lock;
 ll used[5];
+sem_t forks[5];
 
+
+// sleep function
+void msleep(ui time){ usleep(time*1000); return; }
 
 
 // eat function
 void f1(int ind){
 
-    int i = ind, j = (i+1)%5;
+    int i = ind, j = (ind+1)%5;
 
-    // wait for the lock to be freed
-    pthread_mutex_lock(&lock);
+    // wait for semaphore to be freed
+    sem_wait(&forks[i]);
+    sem_wait(&forks[j]);
 
     // eat
-    usleep(50);
+    msleep(3);
 
-    // free the lock
-    pthread_mutex_unlock(&lock);
+    // free the semaphore
+    sem_post(&forks[j]);
+    sem_post(&forks[i]);
 
     used[i]++;
 
@@ -37,7 +43,7 @@ void f1(int ind){
 
 // think function
 void f2(void *ind){
-    usleep(5);
+    msleep(1);
     return;
 }
 
@@ -46,7 +52,10 @@ int main(){
 
     pthread_t phils[NUM];
 
-    pthread_mutex_init(&lock,NULL);
+    // initialise the binary semaphores
+    fr(i,0,5){
+        sem_init(&forks[i],0,0);
+    }
 
     fr(j,0,ITERS){
 
@@ -72,8 +81,10 @@ int main(){
         }
     }
 
-    // pthread_mutex_destroy(&stop);
-    pthread_mutex_destroy(&lock);
+    // destroy the binary semaphores
+    fr(i,0,5){
+        sem_destroy(&forks[i]);
+    }
 
     fr(i,0,5)
         printf("%i %lli\n",i, used[i]);
