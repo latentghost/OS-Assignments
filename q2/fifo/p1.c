@@ -41,80 +41,86 @@ int main(){
         arr[i] = randomString(LEN);
     }
 
-    mkfifo(NAME, 0666);
+    // create fifo pipe
+    mknod(NAME, S_IFIFO | 0666, 0);
 
     out = 0;
 
-    while(out < 50){
+    while(out<50){
 
-        char *data = malloc(SENDSIZE);
-        int max;
-        for(int i=0; i<5; i++){
-            char buf[3];
-            char buff[2];
-            if(out+i<10){
-                buff[0] = (char) (out + i + 48);
-                strcat(data,buff);
-            }
-            else{
-                buf[1] = (char) ((out + i)%10 + 48);
-                buf[0] = (char) ((out + i)/10 + 48);
-                strcat(data,buf);
-            }
+        pid_t pid = fork();
 
-            strcat(data,arr[out+i]);
-            max = out+i;
-
-        }
-
-        int size = strlen(data);
-
-        f = open(NAME, O_WRONLY);
-
-        write(f, data, sizeof(data));
-
-        close(f);
-
-        // pid_t pid = fork();
-
-        // if(pid<0){
-        //     perror("p1 - fork error");
-        //     exit(EXIT_FAILURE);
-        // }
-        // else if(pid==0){
-        //     execl("./p2",NULL);
-        //     exit(EXIT_SUCCESS);
-        // }
-        // else{
-        //     wait(NULL);
-        f = open(NAME, O_RDONLY);
-
-        r = read(f,rd,sizeof(rd));
-
-        char *t = rd;
-        int ind = (int) (*t);
-        ind -= 48;
-        t++;
-        int j = (int) (*t);
-        if(j>=48 && j<=57){
-            ind *= 10;
-            ind += j-48;
-        }
-
-        if(ind!=max){
-            printf("%i %i\n",ind,max);
-            printf("highest index received != highest index sent\n");
+        if(pid<0){
+            perror("p1 - fork error");
             exit(EXIT_FAILURE);
         }
-        out = max;
-        // }
+        else if(pid==0){
+            execl("./p2",NULL);
+            exit(EXIT_SUCCESS);
+        }
+        else{
+            f = open(NAME, O_WRONLY);
+            int size = 0;
+            char *data = malloc(SENDSIZE);
+            int max;
+            
+            // form string to send
+            for(int i=0; i<5; i++){
+                char buf[3];
+                char buff[2];
+                if(out+i<10){
+                    buff[0] = (char) (out + i + 48);
+                    size += strlen(buff);
+                    strcat(data,buff);
+                }
+                else{
+                    buf[1] = (char) ((out + i)%10 + 48);
+                    buf[0] = (char) ((out + i)/10 + 48);
+                    size += strlen(buf);
+                    strcat(data,buf);
+                }
 
-        printf("%i %i\n",out,max);
+                size += LEN;
+                strcat(data,arr[out+i]);
+                max = out+i;
 
-        close(f);
+            }
 
-        out++;
+            // write to fifo pipe
+            data[size] = '\0';
+            write(f, data, strlen(data));
+            close(f);
+
+            // read string sent by child
+            f = open(NAME, O_RDONLY);
+            r = read(f,rd,sizeof(rd));
+
+            char *t = rd;
+            int ind = (int) (*t);
+            ind -= 48;
+            t++;
+            int j = (int) (*t);
+            if(j>=48 && j<=57){
+                ind *= 10;
+                ind += j-48;
+            }
+
+            // reliability check
+            if(ind!=max){
+                printf("highest index received != highest index sent\n");
+                exit(EXIT_FAILURE);
+            }
+            out = max;
+            close(f);
+
+            out++;
+        }
+
+        // separator
+        sleep(1);
     }
+
+    unlink(NAME);
 
     return 0;
 
