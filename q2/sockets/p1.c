@@ -61,72 +61,84 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
 
+    l = listen(d, 5);
+    if(l<0){
+        perror("p1 - listen error");
+        exit(EXIT_FAILURE);
+    }
+
     // send and receive data
     int out = 0;
     while(out<50){
 
-        l = listen(d, 5);
-        if(l<0){
-            perror("p1 - listen error");
+        pid_t pid = fork();
+
+        if(pid<0){
+            perror("p1 - fork error");
             exit(EXIT_FAILURE);
         }
-
-        p2s = accept(d, NULL, NULL);
-        if(p2s<0){
-            perror("p1 - accept error");
-            exit(EXIT_FAILURE);
+        else if(pid==0){
+            execl("./p2",NULL);
+            exit(EXIT_SUCCESS);
         }
-
-        char *data = malloc(SENDSIZE);
-        size_t len = 0;
-        int max = -1;
-        fr(i,0,5){
-            char buf[3];
-            char buff[2];
-            if(out+i<10){
-                buff[0] = (char) (out + i + 48);
-                buff[1] = '\0';
-                strcat(data,buff);
-                len += strlen(buff);
+        else{
+            p2s = accept(d, NULL, NULL);
+            if(p2s<0){
+                perror("p1 - accept error");
+                exit(EXIT_FAILURE);
             }
-            else{
-                buf[1] = (char) ((out + i)%10 + 48);
-                buf[0] = (char) ((out + i)/10 + 48);
-                buf[2] = '\0';
-                strcat(data,buf);
-                len += strlen(buf);
+
+            char *data = malloc(SENDSIZE);
+            size_t len = 0;
+            int max = -1;
+            fr(i,0,5){
+                char buf[3];
+                char buff[2];
+                if(out+i<10){
+                    buff[0] = (char) (out + i + 48);
+                    buff[1] = '\0';
+                    strcat(data,buff);
+                    len += strlen(buff);
+                }
+                else{
+                    buf[1] = (char) ((out + i)%10 + 48);
+                    buf[0] = (char) ((out + i)/10 + 48);
+                    buf[2] = '\0';
+                    strcat(data,buf);
+                    len += strlen(buf);
+                }
+                strcat(data,arr[out+i]);
+                len += strlen(arr[out+i]);
+                if(out+i>max) max = out+i;
             }
-            strcat(data,arr[out+i]);
-            len += strlen(arr[out+i]);
-            if(out+i>max) max = out+i;
+
+            s = send(p2s, data, len, 0);
+
+            wait(NULL);
+
+            char *returnind = malloc(RECSIZE);
+            size_t slen = 3;
+            r = recv(p2s, returnind, slen, 0);
+
+            // check highest index sent = highest index received
+            char *tmp = returnind;
+            int ind = (int) (*tmp);
+            ind -= 48;
+            tmp++;
+            int j = (int) (*tmp);
+            if(j>=48 && j<=57){
+                ind *= 10;
+                ind += j-48;
+            }
+
+            if(max!=ind){
+                printf("highest index received != highest index sent\n");
+                exit(EXIT_FAILURE);
+            }
+            out = max;
+
+            out++;
         }
-
-        s = send(p2s, data, len, 0);
-
-        // exec p2
-
-        char *returnind = malloc(RECSIZE);
-        size_t slen = 3;
-        r = recv(p2s, returnind, slen, 0);
-
-        // check highest index sent = highest index received
-        char *tmp = returnind;
-        int ind = (int) (*tmp);
-        ind -= 48;
-        tmp++;
-        int j = (int) (*tmp);
-        if(j>=48 && j<=57){
-            ind *= 10;
-            ind += j-48;
-        }
-
-        if(max!=ind){
-            printf("highest index received != highest index sent\n");
-            exit(EXIT_FAILURE);
-        }
-        out = max;
-
-        out++;
 
     }
 
