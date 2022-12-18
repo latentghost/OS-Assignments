@@ -9,7 +9,7 @@
 #define ui unsigned int
 #define ll long long
 #define fr(a,b,c) for(int a=b; a<c; a++)
-#define ITERS 10
+#define ITERS 1234
 
 
 // forks (global variables)

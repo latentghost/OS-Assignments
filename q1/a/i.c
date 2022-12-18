@@ -26,7 +26,8 @@ void f1(int ind){
     pthread_mutex_lock(&lock);
 
     // eat
-    usleep(50);
+    sleep(1);
+    printf("Philosopher %i is eating\n",i);
 
     // free the lock
     pthread_mutex_unlock(&lock);
@@ -37,7 +38,9 @@ void f1(int ind){
 
 // think function
 void f2(void *ind){
-    usleep(5);
+    int i = (int *) ind;
+    sleep(1);
+    printf("Philosopher %i is thinking\n",i);
     return;
 }
 
