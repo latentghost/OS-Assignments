@@ -54,7 +54,7 @@ int main(){
 
     // initialise the binary semaphores
     fr(i,0,5){
-        sem_init(&forks[i],0,0);
+        sem_init(&forks[i],0,1);
     }
 
     fr(j,0,ITERS){
