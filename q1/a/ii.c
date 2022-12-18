@@ -9,16 +9,13 @@
 #define ui unsigned int
 #define ll long long
 #define fr(a,b,c) for(int a=b; a<c; a++)
-#define ITERS 1
+#define ITERS 10
 
 
 // forks (global variables)
 ll used[5];
 sem_t forks[5];
 
-
-// sleep function
-void msleep(ui time){ usleep(time*1000); return; }
 
 
 // eat function
@@ -31,7 +28,8 @@ void f1(int ind){
     sem_wait(&forks[j]);
 
     // eat
-    msleep(3);
+    sleep(1);
+    printf("Philosopher %i is eating\n",i);
 
     // free the semaphore
     sem_post(&forks[j]);
@@ -43,7 +41,9 @@ void f1(int ind){
 
 // think function
 void f2(void *ind){
-    msleep(1);
+    int i = (int *) ind;
+    sleep(1);
+    printf("Philosopher %i is thinking\n",i);
     return;
 }
 
