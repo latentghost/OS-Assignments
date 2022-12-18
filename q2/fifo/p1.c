@@ -68,11 +68,13 @@ int main(){
             for(int i=0; i<5; i++){
                 char buf[3];
                 char buff[2];
+                // single digit index
                 if(out+i<10){
                     buff[0] = (char) (out + i + 48);
                     size += strlen(buff);
                     strcat(data,buff);
                 }
+                // double digit index
                 else{
                     buf[1] = (char) ((out + i)%10 + 48);
                     buf[0] = (char) ((out + i)/10 + 48);
