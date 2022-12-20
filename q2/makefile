@@ -4,6 +4,6 @@ all:
 	+$(MAKE) -C shared_mem
 	
 clean:
-	rm -rf fifo/p1 fifo/p2
-	rm -rf sockets/p1 sockets/p2
-	rm -rf shared_mem/p1 shared_mem/p2
+	rm fifo/p1 fifo/p2
+	rm sockets/p1 sockets/p2
+	rm shared_mem/p1 shared_mem/p2
