@@ -18,6 +18,7 @@ typedef struct lock{
 
 // forks (global variables)
 lock forks[5];
+int m1 = 0, m2 = 0;
 lock bowls[2];
 ll used[5];
 
@@ -28,10 +29,7 @@ void f1(int ind){
     int i = ind, j = (i+1)%5;
 
     // wait for the lock to be freed
-    if(i==0) while(used[(i+4)%5]<used[i]);
-    else if(used[(i+4)%5]!=0) while(used[(i+4)%5]<=used[i]);
     while(forks[i].aval==0 && forks[j].aval==0);
-
     while(bowls[0].aval==0 && bowls[1].aval==0);
 
     // lock the forks and bowl
@@ -48,7 +46,7 @@ void f1(int ind){
     }
 
     // eat
-    usleep(500000);
+    sleep(1);
     printf("Philosopher %i is eating\n",i);
 
     // free the lock
@@ -59,7 +57,6 @@ void f1(int ind){
     used[i]++;
 
 }
-
 
 
 int main(){

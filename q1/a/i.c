@@ -18,6 +18,7 @@ typedef struct lock{
 
 // forks (global variables)
 lock forks[5];
+int mutex = 0;
 ll used[5];
 
 
@@ -27,8 +28,7 @@ void f1(int ind){
     int i = ind, j = (i+1)%5;
 
     // wait for the lock to be freed
-    if(i==0) while(used[(i+4)%5]<used[i]);
-    else if(used[(i+4)%5]!=0) while(used[(i+4)%5]<=used[i]);
+    while(mutex!=i);
     while(forks[i].aval==0 && forks[j].aval==0);
 
     // lock the forks
@@ -43,7 +43,7 @@ void f1(int ind){
     forks[i].aval = 1;
     forks[j].aval = 1;
 
-    used[i]++;
+    mutex = (i+1)%5;
 
 }
 
