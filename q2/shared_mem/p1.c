@@ -6,6 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <time.h>
 
 
 #define MEMSIZE 50
@@ -14,6 +15,10 @@
 #define ERR (char *)-1
 #define LEN 7
 #define ARRSIZE 50*sizeof(char *)
+#define ll long long
+
+
+struct timespec start,fin;
 
 
 // random string generator
@@ -62,6 +67,8 @@ int main(){
 
     
     int out = 0;
+
+    clock_gettime(CLOCK_REALTIME,&start);
     
     while(out<50){
         
@@ -99,7 +106,7 @@ int main(){
             exit(EXIT_FAILURE);
         }
         else if (pid==0){
-            execl("./p2",NULL);
+            execl("./p2shm",NULL);
             exit(EXIT_SUCCESS);
         }
         else{
@@ -129,6 +136,18 @@ int main(){
     shmdt(wri);
 
     shmctl(shmid,0,NULL);
+
+    clock_gettime(CLOCK_REALTIME,&fin);
+
+    ll s,ns;
+    s = fin.tv_sec - start.tv_sec;
+    ns = fin.tv_nsec - start.tv_nsec;
+    if(ns<0){
+        s--;
+        ns += 1000000000L;
+    }
+
+    printf("SHARED MEMORY: %lli.%lli seconds\n",s,ns);
     
     return 0;
 

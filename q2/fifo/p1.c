@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 
 #define NAME "./ofif"
@@ -12,6 +13,10 @@
 #define SENDSIZE 100*sizeof(char)
 #define LEN 7
 #define ARRSIZE 50*sizeof(char *)
+#define ll long long
+
+
+struct timespec start,fin;
 
 
 // random string generator
@@ -46,6 +51,8 @@ int main(){
 
     out = 0;
 
+    clock_gettime(CLOCK_REALTIME,&start);
+
     while(out<50){
 
         pid_t pid = fork();
@@ -55,7 +62,7 @@ int main(){
             exit(EXIT_FAILURE);
         }
         else if(pid==0){
-            execl("./p2",NULL);
+            execl("./p2f",NULL);
             exit(EXIT_SUCCESS);
         }
         else{
@@ -122,7 +129,19 @@ int main(){
         sleep(1);
     }
 
+    clock_gettime(CLOCK_REALTIME,&fin);
+
     unlink(NAME);
+
+    ll s,ns;
+    s = fin.tv_sec - start.tv_sec;
+    ns = fin.tv_nsec - start.tv_nsec;
+    if(ns<0){
+        s--;
+        ns += 1000000000L;
+    }
+
+    printf("FIFO: %lli.%lli seconds\n",s,ns);
 
     return 0;
 

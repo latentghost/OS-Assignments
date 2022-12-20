@@ -6,6 +6,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 
 #define LEN 7
@@ -14,6 +15,10 @@
 #define RECSIZE 3*sizeof(char)
 #define NAME "csock"
 #define fr(i,a,b) for(int i=a; i<b; i++)
+#define ll long long
+
+
+struct timespec start,fin;
 
 
 // random string generator
@@ -69,6 +74,9 @@ int main(int argc, char *argv[]){
 
     // send and receive data
     int out = 0;
+
+    clock_gettime(CLOCK_REALTIME,&start);
+    
     while(out<50){
 
         pid_t pid = fork();
@@ -78,7 +86,7 @@ int main(int argc, char *argv[]){
             exit(EXIT_FAILURE);
         }
         else if(pid==0){
-            execl("./p2",NULL);
+            execl("./p2s",NULL);
             exit(EXIT_SUCCESS);
         }
         else{
@@ -144,6 +152,18 @@ int main(int argc, char *argv[]){
 
     close(d);
     unlink(NAME);
+
+    clock_gettime(CLOCK_REALTIME,&fin);
+
+    ll s,ns;
+    s = fin.tv_sec - start.tv_sec;
+    ns = fin.tv_nsec - start.tv_nsec;
+    if(ns<0){
+        s--;
+        ns += 1000000000L;
+    }
+
+    printf("SHARED MEMORY: %lli.%lli seconds\n",s,ns);
     
     return 0;
 
