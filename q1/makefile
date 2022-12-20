@@ -1,8 +1,10 @@
-all:
-	+$(MAKE) -C a
-	+$(MAKE) -C b
+all:	q1aa	q1ab	q1ba	q1bb
 
-clean:
-	rm a/i a/ii
-	rm b/i b/ii
-
+q1aa:
+	gcc -w -o ./q1/a/q1aa ./q1/a/i.c
+q1ab:
+	gcc -w -o ./q1/a/q1ab ./q1/a/ii.c
+q1ba:
+	gcc -w -o ./q1/b/q1ba ./q1/b/i.c
+q1bb:
+	gcc -w -o ./q1/b/q1bb ./q1/b/ii.c
