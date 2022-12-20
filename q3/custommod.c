@@ -7,24 +7,23 @@
 
 pid_t pid = 0;
 
-module_param(pid,pid_t,S_IRUSR);
-
-void printpid(){
-    printk(KERN_INFO "PID: %d",pid);
-}
+module_param(pid,int,S_IRUSR);
 
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("latentghost");
-MODULE_DESCRIPTION("takes pid of process as input and prints the ")
+MODULE_DESCRIPTION("takes pid of process as input and prints the pid, pid_g, usrgrp");
 
 
 static int __init readprocess_init(void){
-    struct task_struct ts = find_task_by_vpid(pid);
-    printpid();
+    struct task_struct *ts = (struct task_struct *) find_task_by_vpid(pid);
+    printk(KERN_ALERT "pid: %d",pid);
     return 0;
 }
 
 static void __exit readprocess_exit(void){
     return;
 }
+
+module_init(readprocess_init);
+module_exit(readprocess_exit);
