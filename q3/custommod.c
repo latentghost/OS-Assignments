@@ -1,13 +1,14 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/init.h>
-#include <linux/sched.h>
+#include <linux/pid.h>
+#include <linux/fs.h>
 #include <linux/moduleparam.h>
 
 
-pid_t pid = 0;
+pid_t pid1 = 0;
 
-module_param(pid,int,S_IRUSR);
+module_param(pid1,int,S_IRUSR);
 
 
 MODULE_LICENSE("GPL");
@@ -16,10 +17,17 @@ MODULE_DESCRIPTION("takes pid of process as input and prints the pid, pid_g, usr
 
 
 static int __init readprocess_init(void){
-    struct task_struct *ts = (struct task_struct *) find_task_by_vpid(pid);
-    printk(KERN_INFO "pid: %d\n",pid);
-    printk(KERN_INFO "user id: %d\n",ts->uid);
-    printk(KERN_INFO "group id: %d\n" ts->gid);
+    struct task_struct *ts;
+    struct pid *ps;
+    printk(KERN_INFO "pid: %d" ,pid1);
+
+    ps = find_get_pid(pid1);
+    ts = pid_task(ps,PIDTYPE_PID);
+
+    pid_t tg = ts->tgid;
+    pid_t uid = ts->pid;
+    printk(KERN_INFO "user id: %d" ,uid);
+    printk(KERN_INFO "group id: %d" ,tg);
     return 0;
 }
 
