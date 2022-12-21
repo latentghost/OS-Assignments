@@ -20,6 +20,7 @@ MODULE_DESCRIPTION("takes pid of process as input and prints the ")
 
 
 static int __init readprocess_init(void){
+    struct task_struct ts = find_task_by_vpid(pid);
     printpid();
     return 0;
 }
