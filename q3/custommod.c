@@ -17,11 +17,14 @@ MODULE_DESCRIPTION("takes pid of process as input and prints the pid, pid_g, usr
 
 static int __init readprocess_init(void){
     struct task_struct *ts = (struct task_struct *) find_task_by_vpid(pid);
-    printk(KERN_ALERT "pid: %d",pid);
+    printk(KERN_INFO "pid: %d\n",pid);
+    printk(KERN_INFO "user id: %d\n",ts->uid);
+    printk(KERN_INFO "group id: %d\n" ts->gid);
     return 0;
 }
 
 static void __exit readprocess_exit(void){
+    printk(KERN_INFO "exiting module...\n")
     return;
 }
 
