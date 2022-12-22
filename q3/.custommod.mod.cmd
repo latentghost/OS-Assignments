@@ -1,1 +1,0 @@
-cmd_/home/latentghost/linux-5.19.8/q3/custommod.mod := printf '%s\n'   custommod.o | awk '!x[$$0]++ { print("/home/latentghost/linux-5.19.8/q3/"$$0) }' > /home/latentghost/linux-5.19.8/q3/custommod.mod
