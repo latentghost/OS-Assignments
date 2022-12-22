@@ -24,7 +24,7 @@ static int __init readprocess_init(void){
 }
 
 static void __exit readprocess_exit(void){
-    printk(KERN_INFO "exiting module...\n")
+    printk(KERN_INFO "exiting module...\n");
     return;
 }
 
